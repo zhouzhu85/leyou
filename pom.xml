@@ -12,6 +12,7 @@
         <module>ly-registy</module>
         <module>ly-gateway</module>
         <module>ly-item</module>
+        <module>ly-common</module>
     </modules>
 
     <parent>
