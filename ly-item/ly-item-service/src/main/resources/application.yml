@@ -15,3 +15,7 @@ eureka:
   instance:
     prefer-ip-address: true
     ip-address: 127.0.0.1
+#sql语句打印
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

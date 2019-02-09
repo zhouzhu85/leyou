@@ -39,4 +39,13 @@ public class BrandService {
         PageInfo info=new PageInfo(list);
         return new PageResult<>(info.getTotal(),list);
     }
+
+    public void saveBrand(Brand brand, List<Long> cids) {
+        //新增品牌
+        brand.setId(null);
+        int count = brandMapper.insert(brand);
+        if (count!=1){
+            throw new LyException(ExceptionEnum.BRAND_NOT_FOUND);
+        }
+    }
 }
