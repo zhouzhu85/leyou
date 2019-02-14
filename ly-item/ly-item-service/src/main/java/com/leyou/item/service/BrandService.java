@@ -10,6 +10,7 @@ import com.leyou.item.pojo.Brand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.StringUtil;
@@ -40,6 +41,7 @@ public class BrandService {
         return new PageResult<>(info.getTotal(),list);
     }
 
+    @Transactional
     public void saveBrand(Brand brand, List<Long> cids) {
         //新增品牌
         brand.setId(null);

@@ -36,8 +36,8 @@ public class BrandController {
         return ResponseEntity.ok(brandService.queryBrandByPage(page,rows,sortBy,desc,key));
     }
     @PostMapping
-    public ResponseEntity<Brand> saveBrand(Brand brand, @RequestParam("cids")List<Long> cids){
-        brandService.saveBrand(brand,cids);
+    public ResponseEntity<Void> saveBrand(Brand brand, @RequestParam("categories")List<Long> categories){
+        brandService.saveBrand(brand,categories);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
