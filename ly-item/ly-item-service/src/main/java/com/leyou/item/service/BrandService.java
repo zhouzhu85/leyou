@@ -47,5 +47,12 @@ public class BrandService {
         if (count!=1){
             throw new LyException(ExceptionEnum.BRAND_NOT_FOUND);
         }
+        //新增中间表
+        for (Long cid:cids){
+            count = brandMapper.insertCategoryBrand(cid, brand.getId());
+            if (count !=1){
+                throw new LyException(ExceptionEnum.BRAND_SAVE_ERROR);
+            }
+        }
     }
 }
