@@ -26,7 +26,6 @@ public class UploadService {
     @Autowired
     private UploadProperties uploadProperties;
 
-    //private static final List<String> ALLOW_TYPES= Arrays.asList("image/jpeg","image/png","image/bmp");
     public String uploadImage(MultipartFile file) {
         try {
             //校验文件类型
