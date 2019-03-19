@@ -3,6 +3,8 @@ server:
 spring:
   application:
     name: ly-registy
+  freemarker:
+    prefer-file-system-access: false
 eureka:
   client:
     service-url:

@@ -3,6 +3,8 @@ server:
 spring:
   application:
     name: api-gateway
+  freemarker:
+    prefer-file-system-access: false
 eureka:
   client:
     service-url:

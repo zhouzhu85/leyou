@@ -7,13 +7,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Data
-@Table(name = "tb_specification")
+@Table(name = "tb_spec_group")
 public class SpecGroup {
     @Id
     @KeySql(useGeneratedKeys = true)
-    //private Long id;
+    private Long id;
 
-    private Long categoryId;
+    private Long cid;
 
-    private String specifications;
+    private String name;
 }
