@@ -34,11 +34,53 @@ public class SpecificationService {
 
     public List<SpecParam> queryParamByGId(Long gid) {
         SpecParam specParam=new SpecParam();
-        specParam.setGroup_id(gid);
+        specParam.setGroupId(gid);
         List<SpecParam> specParamList = specParamMapper.select(specParam);
         if (CollectionUtils.isEmpty(specParamList)){
             throw new LyException(ExceptionEnum.SPEC_PARAM_NOT_FOND);
         }
         return specParamList;
+    }
+
+    public void saveSpecGroup(SpecGroup specGroup) {
+        int count=0;
+        if (specGroup.getId()!=null){
+            count = specGroupMapper.updateByPrimaryKey(specGroup);
+        }else {
+         count= specGroupMapper.insert(specGroup);
+        }
+        if (count!=1){
+            throw new LyException(ExceptionEnum.SPEC_GROUP_SAVE_ERROR);
+        }
+    }
+
+    public void saveParam(SpecParam param) {
+        int count=0;
+        if (param.getId()==null){
+            count = specParamMapper.insert(param);
+        }else {
+            count=specParamMapper.updateByPrimaryKey(param);
+        }
+        if (count!=1){
+            throw new LyException(ExceptionEnum.SPEC_PARAM_SAVE_ERROR);
+        }
+    }
+
+    public void deleteGroupByCid(Long gid) {
+        SpecParam specParam=new SpecParam();
+        specParam.setGroupId(gid);
+        List<SpecParam> paramList = specParamMapper.select(specParam);
+        if (paramList.size()>0){
+            throw new LyException(ExceptionEnum.SPEC_GROUP_HAVE_PARAM);
+        }else {
+            specGroupMapper.deleteByPrimaryKey(gid);
+        }
+    }
+
+    public void deleteParamById(Long id) {
+        int count = specParamMapper.deleteByPrimaryKey(id);
+        if (count!=1){
+            throw new LyException(ExceptionEnum.SPEC_PARAM_DELETE_ERROR);
+        }
     }
 }

@@ -14,7 +14,7 @@ public class SpecParam {
     @KeySql(useGeneratedKeys = true)
     private Long id;
     private Long cid;
-    private Long group_id;
+    private Long groupId;
     private String name;
     @Column(name = "`numeric`")
     private Boolean numeric;

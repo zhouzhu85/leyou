@@ -4,8 +4,10 @@ import com.leyou.item.pojo.SpecGroup;
 import com.leyou.item.pojo.SpecParam;
 import com.leyou.item.service.SpecificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sun.net.www.http.HttpClient;
 
 import java.util.List;
 
@@ -25,8 +27,78 @@ public class SpecificationController {
         return ResponseEntity.ok(specificationService.queryGroupByCid(cid));
     }
 
+    /**
+     * 根据规格id查询参数
+     * @param gid
+     * @return
+     */
     @GetMapping("params")
     public ResponseEntity<List<SpecParam>> queryParamByGid(@RequestParam("gid") Long gid){
         return ResponseEntity.ok(specificationService.queryParamByGId(gid));
+    }
+
+    /**
+     * 新增规格参数
+     * @param p
+     * @return
+     */
+    @PostMapping("param")
+    public ResponseEntity<Void> addParam(SpecParam p){
+        specificationService.saveParam(p);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    /**
+     * 修改规格参数
+     * @param p
+     * @return
+     */
+    @PutMapping("param")
+    public ResponseEntity<Void> updateParam(SpecParam p){
+        specificationService.saveParam(p);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    /**
+     * 删除规格参数
+     * @param id
+     * @return
+     */
+    @DeleteMapping("param/{id}")
+    public ResponseEntity<Void> deleteParam(@PathVariable("id") Long id){
+        specificationService.deleteParamById(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+    /**
+     * 新增规格组
+     * @param group
+     * @return
+     */
+    @PostMapping("group")
+    public ResponseEntity<Void> addGroupByCid(SpecGroup group){
+        specificationService.saveSpecGroup(group);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    /**
+     * 修改规格组
+     * @param group
+     * @return
+     */
+    @PutMapping("group")
+    public ResponseEntity<Void> updateGroupByCid(SpecGroup group){
+        specificationService.saveSpecGroup(group);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    /**
+     * 删除规格组
+     * @param gid
+     * @return
+     */
+    @DeleteMapping("group/{gid}")
+    public ResponseEntity<Void> deleteGroupByCid(@PathVariable("gid") Long gid){
+        specificationService.deleteGroupByCid(gid);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
