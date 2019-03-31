@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public enum  ExceptionEnum {
     CATEGORY_NOT_FOND(404,"商品分类没查到"),
+    GOODS_NOT_FOND(404,"商品没查到"),
     SPEC_GROUP_NOT_FOND(404,"商品规格组不存在"),
     SPEC_GROUP_HAVE_PARAM(500,"该规格组存在参数不能删除"),
     SPEC_PARAM_NOT_FOND(404,"商品规格参数不存在"),
