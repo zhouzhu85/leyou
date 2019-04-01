@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Table(name = "tb_spu")
@@ -40,4 +41,10 @@ public class Spu {
     private Date createTime;
 
     private Date lastUpdateTime;
+
+    @Transient
+    private List<Sku> skus;
+
+    @Transient
+    private SpuDetail spuDetail;
 }
