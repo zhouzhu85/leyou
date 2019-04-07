@@ -14,12 +14,11 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,13 +48,14 @@ public class GoodsService {
         Example example=new Example(Spu.class);
         Example.Criteria criteria = example.createCriteria();
         //搜索
-        if (!StringUtils.isNotBlank(key)){
+        if (StringUtils.isNotBlank(key)){
             criteria.orLike("title","%"+key+"%");
         }
         //上下架
         if (saleable!=null){
             criteria.andEqualTo("saleable",saleable);
         }
+        criteria.andEqualTo("valid",true);
         example.setOrderByClause("last_update_time DESC");
         List<Spu> spuList = spuMapper.selectByExample(example);
         //解析分类和品牌的名称
@@ -73,14 +73,14 @@ public class GoodsService {
             spu.setBname(brandService.queryById(spu.getBrandId()).getName());
         }
     }
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void saveGoods(Spu spu) {
         //新增spu
         spu.setId(null);
         spu.setCreateTime(new Date());
         spu.setLastUpdateTime(spu.getCreateTime());
         spu.setSaleable(true);
-        spu.setValid(false);
+        spu.setValid(true);
         int count = spuMapper.insert(spu);
         if (count!=1){
             throw new LyException(ExceptionEnum.GOODS_SAVE_ERROR);
@@ -89,6 +89,73 @@ public class GoodsService {
         SpuDetail detail = spu.getSpuDetail();
         detail.setSpuId(spu.getId());
         detailMapper.insert(detail);
+
+        //新增sku和stock
+        saveSkuAndStock(spu,count);
+
+    }
+
+    public SpuDetail queryDetailBySpuId(Long spuId) {
+        SpuDetail spuDetail = detailMapper.selectByPrimaryKey(spuId);
+        if (spuDetail==null){
+            throw new LyException(ExceptionEnum.GOODS_DETAIL_NOT_FOUND);
+        }
+        return spuDetail;
+    }
+
+    public List<Sku> querySkusBySpuId(Long id) {
+        Sku sku=new Sku();
+        sku.setSpuId(id);
+        List<Sku> skuList = skuMapper.select(sku);
+        //java8之前写法
+//        for (Sku sku:skuList){
+        //多次查询影响性能
+//            sku.setStock(stockMapper.selectByPrimaryKey(sku.getId()).getStock());
+//        }
+
+        //java8写法
+        //查询库存
+        List<Long> ids = skuList.stream().map(Sku::getId).collect(Collectors.toList());
+        //批量一次查完库存
+        List<Stock> stockList = stockMapper.selectByIdList(ids);
+        //把stock变成map，key是sku的id，value是库存数量
+        Map<Long, Integer> stockMap = stockList.stream().collect(Collectors.toMap(Stock::getSkuId, Stock::getStock));
+        skuList.forEach(s->s.setStock(stockMap.get(s.getId())));
+        return skuList;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateGoods(Spu spu) {
+        if (spu.getId()==null){
+            throw new LyException(ExceptionEnum.GOODS_Id_IS_EMPTY);
+        }
+        Sku sku=new Sku();
+        sku.setSpuId(spu.getId());
+        List<Sku> skuList = skuMapper.select(sku);
+        if (!CollectionUtils.isEmpty(skuList)){
+            //删除sku和stock
+            skuMapper.delete(sku);
+            List<Long> ids = skuList.stream().map(Sku::getId).collect(Collectors.toList());
+            stockMapper.deleteByIdList(ids);
+        }
+        //修改spu
+        spu.setValid(null);
+        spu.setSaleable(null);
+        spu.setLastUpdateTime(new Date());
+        spu.setCreateTime(null);
+        int count = spuMapper.updateByPrimaryKeySelective(spu);
+        if (count!=1){
+            throw new LyException(ExceptionEnum.GOODS_UPDATE_ERROR);
+        }
+        //修改detail
+         count = detailMapper.updateByPrimaryKeySelective(spu.getSpuDetail());
+        if (count!=1){
+            throw new LyException(ExceptionEnum.GOODS_UPDATE_ERROR);
+        }
+        //新增sku和stock
+        saveSkuAndStock(spu,count);
+    }
+    private void saveSkuAndStock(Spu spu,int count){
         List<Stock> stockList=new ArrayList<>();
         //新增sku
         List<Sku> skus = spu.getSkus();
@@ -108,6 +175,25 @@ public class GoodsService {
         }
         //批量新增库存
         stockMapper.insertList(stockList);
-
+    }
+    @Transactional(rollbackFor =Exception.class)
+    public void deleteGoods(Long id) {
+        Spu spu=new Spu();
+        spu.setId(id);
+        spu.setValid(false);
+        int count = spuMapper.updateByPrimaryKeySelective(spu);
+        if (count!=1){
+            throw new LyException(ExceptionEnum.GOODS_DETAIL_NOT_FOUND);
+        }
+    }
+    @Transactional(rollbackFor = Exception.class)
+    public void updateSaleable(Long spuId, Boolean saleable) {
+        Spu spu=new Spu();
+        spu.setId(spuId);
+        spu.setSaleable(saleable);
+        int count = spuMapper.updateByPrimaryKeySelective(spu);
+        if (count!=1){
+            throw new LyException(ExceptionEnum.GOODS_UPDATE_ERROR);
+        }
     }
 }
