@@ -1,5 +1,4 @@
 package com.leyou.common.utils;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -28,7 +27,17 @@ public class NumberUtils {
         if(str == null || str.trim().equals("")){
             return false;
         }
-        return str.matches("^\\d+$");
+        return str.matches("^\\d+\\.?\\d+$");
+    }
+
+    public static double toDouble(String s){
+        if(s == null){
+            return 0;
+        }
+        if(!isDigit(s)){
+            return 0;
+        }
+        return Double.valueOf(s);
     }
 
     /**
