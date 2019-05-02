@@ -74,7 +74,7 @@ public class GoodsController {
      * @return
      */
     @GetMapping("sku/list")
-    public ResponseEntity<List<Sku>> querySkuBySpuId(Long id){
+    public ResponseEntity<List<Sku>> querySkuBySpuId(@RequestParam("id") Long id){
         return ResponseEntity.ok(goodsService.querySkusBySpuId(id));
     }
 

@@ -14,9 +14,9 @@ public class SpuDetail {
 
     private String description;
 
-    private String specifications;
+//    private String specifications;
 
-    private String specTemplate;
+//    private String specTemplate;
 
     private String packingList;
 

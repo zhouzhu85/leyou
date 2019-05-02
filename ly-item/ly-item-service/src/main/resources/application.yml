@@ -4,7 +4,7 @@ spring:
   application:
     name: item-service
   datasource:
-    url: jdbc:mysql://localhost:3306/leyou?characterEncoding=utf-8
+    url: jdbc:mysql://localhost:3306/leyou1?characterEncoding=utf-8
     username: root
     password: zhouzhu
 #注册中心
