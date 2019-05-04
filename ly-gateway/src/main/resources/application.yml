@@ -13,6 +13,7 @@ zuul:
   prefix: /api #添加路由前缀
   routes:
     item-service: /item/**
+    search-service: /search/**
     upload-service: /**
 hystrix:
   command:

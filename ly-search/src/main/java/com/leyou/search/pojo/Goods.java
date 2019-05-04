@@ -59,4 +59,5 @@ public class Goods {
      * 可搜索的规格参数，key是参数名，值是参数值
      */
     private Map<String,Object> specs;
+
 }

@@ -5,14 +5,22 @@ import com.leyou.common.enums.ExceptionEnum;
 import com.leyou.common.exception.LyException;
 import com.leyou.common.utils.JsonUtils;
 import com.leyou.common.utils.NumberUtils;
+import com.leyou.common.vo.PageResult;
 import com.leyou.item.pojo.*;
 import com.leyou.search.client.BrandClient;
 import com.leyou.search.client.CategoryClient;
 import com.leyou.search.client.GoodsClient;
 import com.leyou.search.client.SpecificationClient;
 import com.leyou.search.pojo.Goods;
+import com.leyou.search.pojo.SearchRequest;
+import com.leyou.search.repository.GoodsRepository;
 import org.apache.commons.lang.StringUtils;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -32,6 +40,9 @@ public class SearchService {
     private GoodsClient goodsClient;
     @Autowired
     private SpecificationClient specificationClient;
+
+    @Autowired
+    private GoodsRepository repository;
 
     public Goods buildGoods(Spu spu){
         Long spuId = spu.getId();
@@ -142,5 +153,24 @@ public class SearchService {
             }
         }
         return result;
+    }
+
+    public PageResult<Goods> search(SearchRequest request) {
+        int page=request.getPage()-1;
+        int size=request.getSize();
+        //创建查询构建器
+        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        //结果过滤
+        queryBuilder.withSourceFilter(new FetchSourceFilter(new String[]{"id","subTitle","skus"},null));
+        //分页
+        queryBuilder.withPageable(PageRequest.of(page,size));
+        //过滤
+        queryBuilder.withQuery(QueryBuilders.matchQuery("all",request.getKey()));
+        //查询
+        Page<Goods> result = repository.search(queryBuilder.build());
+        //解析结果
+        long total = result.getTotalElements();
+        List<Goods> goodsList = result.getContent();
+        return new PageResult<>(total,goodsList);
     }
 }
