@@ -16,6 +16,8 @@ import com.leyou.search.pojo.SearchRequest;
 import com.leyou.search.repository.GoodsRepository;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -164,13 +166,21 @@ public class SearchService {
         queryBuilder.withSourceFilter(new FetchSourceFilter(new String[]{"id","subTitle","skus"},null));
         //分页
         queryBuilder.withPageable(PageRequest.of(page,size));
+        //排序
+        String sortBy = request.getSortBy();
+        Boolean desc = request.getDescending();
+        if (!StringUtils.isEmpty(sortBy)){
+            //如果不为空，则进行排序
+            queryBuilder.withSort(SortBuilders.fieldSort(sortBy).order(desc? SortOrder.DESC:SortOrder.ASC));
+        }
         //过滤
         queryBuilder.withQuery(QueryBuilders.matchQuery("all",request.getKey()));
         //查询
         Page<Goods> result = repository.search(queryBuilder.build());
         //解析结果
         long total = result.getTotalElements();
+        int totalPage=result.getTotalPages();
         List<Goods> goodsList = result.getContent();
-        return new PageResult<>(total,goodsList);
+        return new PageResult<>(total,totalPage,goodsList);
     }
 }
