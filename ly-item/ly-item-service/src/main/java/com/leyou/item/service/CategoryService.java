@@ -32,4 +32,9 @@ public class CategoryService {
         }
         return categoryList;
     }
+
+//    public List<String> queryNameByIds(List<Long> ids) {
+////        categoryMapper.select
+//        return null;
+//    }
 }
