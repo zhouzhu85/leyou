@@ -209,6 +209,6 @@ public class GoodsService {
         //查询商品详情
         spu.setSpuDetail(queryDetailBySpuId(id));
 
-        return null;
+        return spu;
     }
 }

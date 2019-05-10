@@ -28,5 +28,5 @@ public interface SpecificationApi {
      * @return List<SpecGroup>
      */
     @GetMapping("spec/group")
-    List<SpecGroup> queryGroupByCid(@RequestParam("cid") Long cid);
+    List<SpecGroup> queryListByCid(@RequestParam("cid") Long cid);
 }
