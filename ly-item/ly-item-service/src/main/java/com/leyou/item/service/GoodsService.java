@@ -12,6 +12,7 @@ import com.leyou.item.mapper.StockMapper;
 import com.leyou.item.pojo.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -195,5 +196,19 @@ public class GoodsService {
         if (count!=1){
             throw new LyException(ExceptionEnum.GOODS_UPDATE_ERROR);
         }
+    }
+
+    public Spu querySpuById(Long id) {
+        //查询spu
+        Spu spu = spuMapper.selectByPrimaryKey(id);
+        if (spu==null){
+            throw new LyException(ExceptionEnum.GOODS_NOT_FOND);
+        }
+        //查询sku
+        spu.setSkus(querySkusBySpuId(id));
+        //查询商品详情
+        spu.setSpuDetail(queryDetailBySpuId(id));
+
+        return null;
     }
 }

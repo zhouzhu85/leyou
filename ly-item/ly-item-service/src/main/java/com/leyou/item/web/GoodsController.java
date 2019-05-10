@@ -79,6 +79,15 @@ public class GoodsController {
     }
 
     /**
+     * 根据id查询spu
+     * @param id
+     * @return
+     */
+    @GetMapping("spu/{id}")
+    public ResponseEntity<Spu> querySpuById(@RequestParam("id") Long id){
+        return ResponseEntity.ok(goodsService.querySpuById(id));
+    }
+    /**
      * 删除商品
      * @param id
      * @return
@@ -88,9 +97,17 @@ public class GoodsController {
         goodsService.deleteGoods(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    /**
+     * 更新商品上下架
+     * @param spuId
+     * @param saleable
+     * @return
+     */
     @GetMapping("updateSaleable")
     public ResponseEntity<Void> updateSaleable(@RequestParam("spuId") Long spuId,@RequestParam("saleable") Boolean saleable){
         goodsService.updateSaleable(spuId,saleable);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
 }
