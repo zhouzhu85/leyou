@@ -84,7 +84,7 @@ public class GoodsController {
      * @return
      */
     @GetMapping("spu/{id}")
-    public ResponseEntity<Spu> querySpuById(@RequestParam("id") Long id){
+    public ResponseEntity<Spu> querySpuById(@PathVariable("id") Long id){
         return ResponseEntity.ok(goodsService.querySpuById(id));
     }
     /**
