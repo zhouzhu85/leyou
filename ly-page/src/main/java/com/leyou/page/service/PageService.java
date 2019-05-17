@@ -5,15 +5,23 @@ import com.leyou.page.client.BrandClient;
 import com.leyou.page.client.CategoryClient;
 import com.leyou.page.client.GoodsClient;
 import com.leyou.page.client.SpecificationClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class PageService {
     @Autowired
     private BrandClient brandClient;
@@ -23,6 +31,8 @@ public class PageService {
     private GoodsClient goodsClient;
     @Autowired
     private SpecificationClient specificationClient;
+    @Autowired
+    private TemplateEngine templateEngine;
 
     public Map<String, Object> loadModel(Long spuId) {
         //查询spu
@@ -46,5 +56,27 @@ public class PageService {
         model.put("categories",categories);
         model.put("specs",specs);
         return model;
+    }
+    public void createHtml(Long spuId){
+        //上下文
+        Context context=new Context();
+        context.setVariables(loadModel(spuId));
+        //输出流
+        File dest = new File("F:\\", spuId + ".html");
+        if (dest.exists()){
+            dest.delete();
+        }
+        try {
+            PrintWriter writer = new PrintWriter(dest, "UTF-8");
+            //生成html
+            templateEngine.process("item",context,writer);
+        } catch (Exception e) {
+           log.error("[静态页服务] 生成静态页异常：",e);
+        }
+    }
+
+    public void deleteHtml(Long spuId) {
+        File dest = new File("F:\\", spuId + ".html");
+        dest.delete();
     }
 }
