@@ -62,7 +62,7 @@ public class PageService {
         Context context=new Context();
         context.setVariables(loadModel(spuId));
         //输出流
-        File dest = new File("F:\\", spuId + ".html");
+        File dest = new File("E:\\", spuId + ".html");
         if (dest.exists()){
             dest.delete();
         }
@@ -76,7 +76,7 @@ public class PageService {
     }
 
     public void deleteHtml(Long spuId) {
-        File dest = new File("F:\\", spuId + ".html");
+        File dest = new File("E:\\", spuId + ".html");
         dest.delete();
     }
 }
