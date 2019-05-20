@@ -10,7 +10,7 @@ spring:
   jackson:
     default-property-inclusion: non_null
   rabbitmq:
-    host: 192.168.56.200
+    host: 192.168.3.200
     username: leyou
     password: 123456
     virtual-host: /leyou

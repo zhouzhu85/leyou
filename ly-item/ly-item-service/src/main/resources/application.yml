@@ -9,7 +9,7 @@ spring:
     password: zhouzhu
   #rabbitmq消息队列配置
   rabbitmq:
-    host: 192.168.56.200
+    host: 192.168.3.200
     username: leyou
     password: 123456
     virtual-host: /leyou
