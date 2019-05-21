@@ -24,7 +24,8 @@ public enum  ExceptionEnum {
     GOODS_DETAIL_NOT_FOUND(500,"商品详情不存在"),
     GOODS_UPDATE_ERROR(500,"更新商品失败"),
     GOODS_Id_IS_EMPTY(400,"商品id为空"),
-    GOODS_DELETE_ERROR(500,"商品删除失败")
+    GOODS_DELETE_ERROR(500,"商品删除失败"),
+    INVALID_USER_DATA_TYPE(400,"用户数据类型无效"),
     ;
     private int code;
     private String msg;
