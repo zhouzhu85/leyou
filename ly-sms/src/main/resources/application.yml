@@ -12,7 +12,7 @@ spring:
     host: 192.168.3.200
 ly:
   sms:
-    accessKeyId: LTAIf6vJTEe70iPa
-    accessKeySecret: A2ZGBWfrkz9arF908cmDWXmIrAlngA
+    accessKeyId: saaw
+    accessKeySecret: sdf
     signName: 乐优商城
-    verifyCodeTemplate: SMS_133976814
+    verifyCodeTemplate: aasdf
