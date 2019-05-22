@@ -26,6 +26,7 @@ public enum  ExceptionEnum {
     GOODS_Id_IS_EMPTY(400,"商品id为空"),
     GOODS_DELETE_ERROR(500,"商品删除失败"),
     INVALID_USER_DATA_TYPE(400,"用户数据类型无效"),
+    INVALID_VERIFY_CODE(400,"无效的验证码"),
     ;
     private int code;
     private String msg;

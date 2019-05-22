@@ -1,5 +1,6 @@
 package com.leyou.user.web;
 
+import com.leyou.user.pojo.User;
 import com.leyou.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,5 +37,10 @@ public class UserController {
     public ResponseEntity<Void> sendCode(@RequestParam("phone")String phone){
         userService.sendCode(phone);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+    @PostMapping("register")
+    public ResponseEntity<Void> register(User user,@RequestParam("code") String code){
+        userService.register(user,code);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
