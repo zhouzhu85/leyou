@@ -42,6 +42,14 @@ public class UserController {
         userService.sendCode(phone);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    /**
+     * 用户注册
+     * @param user
+     * @param result
+     * @param code
+     * @return
+     */
     @PostMapping("register")
     public ResponseEntity<Void> register(@Valid User user, BindingResult result,@RequestParam("code") String code){
         //自定义修改验证错误信息（可以不写也行）
@@ -51,5 +59,16 @@ public class UserController {
         }
         userService.register(user,code);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    /**
+     * 根据用户名和密码查询用户
+     * @param username
+     * @param password
+     * @return
+     */
+    @GetMapping("/query")
+    public ResponseEntity<User> queryUserByUsernameAndPassword(@RequestParam("username") String username,@RequestParam("password") String password){
+        return ResponseEntity.ok(userService.queryUserByUsernameAndPassword(username,password));
     }
 }
