@@ -6,7 +6,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://127.0.0.1:10086
+      defaultZone: http://127.0.0.1:10086/eureka
     registry-fetch-interval-seconds: 5
   instance:
     prefer-ip-address: true
@@ -14,6 +14,7 @@ eureka:
 ly:
   jwt:
     secret: leyou@Login(Auth}*^31)&heiMa% # 登录校验的密钥
-    pubKeyPath: C:\\tmp\\rsa\\rsa.pub # 公钥地址
-    priKeyPath: C:\\tmp\\rsa\\rsa.pri # 私钥地址
+    pubKeyPath: E:\\leyou_atuh_key\\rsa.pub # 公钥地址
+    priKeyPath: E:\\leyou_atuh_key\\rsa.pri # 私钥地址
     expire: 30 # 过期时间,单位分钟
+    cookieName: LY_TOKEN
