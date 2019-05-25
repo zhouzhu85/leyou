@@ -39,6 +39,6 @@ public class JwtTest {
         String token = "eyJhbGciOiJSUzI1NiJ9.eyJpZCI6MjAsInVzZXJuYW1lIjoiSmFjayIsImV4cCI6MTU1ODUxNzkxOX0.JxkDeT88xn8UB-PucSNH88RM3dJhN4JLJe2OWGL0JyrP26J8VOi03UhLVLoOG-bUu6ZPnILhObxETrqPRhV9Lw9eJ3DVmwZq9327asC8znrNpxbE3XNu71tkeHEbDX7J4NuLFLVpcyXJq6D9hUuiP95zXKQejAInZTV0Jw0iuo0";
         UserInfo userInfo = JwtUtils.getUserInfo(publicKey, token);
         System.out.println("id:" + userInfo.getId());
-        System.out.println("name:" + userInfo.getName());
+        System.out.println("name:" + userInfo.getUsername());
     }
 }
