@@ -31,3 +31,16 @@ ribbon:
   ReadTimeout: 3500 #ribbon读取超时时长
   MaxAutoRetries: 0 #当前服务重试次数
   MaxAutoRetriesNextServer: 0 #切换服务重试次数
+
+ly:
+  jwt:
+    pubKeyPath: E:\\leyou_atuh_key\\rsa.pub # 公钥地址
+    cookieName: LY_TOKEN
+  filter:
+    allowPaths:
+      - /api/auth
+      - /api/search
+      - /api/user/register
+      - /api/user/check
+      - /api/user/code
+      - /api/item
