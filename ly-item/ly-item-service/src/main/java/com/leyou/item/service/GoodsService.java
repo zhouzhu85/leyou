@@ -13,11 +13,9 @@ import com.leyou.item.pojo.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
@@ -121,11 +119,8 @@ public class GoodsService {
         //java8写法
         //查询库存
         List<Long> ids = skuList.stream().map(Sku::getId).collect(Collectors.toList());
-        //批量一次查完库存
-        List<Stock> stockList = stockMapper.selectByIdList(ids);
-        //把stock变成map，key是sku的id，value是库存数量
-        Map<Long, Integer> stockMap = stockList.stream().collect(Collectors.toMap(Stock::getSkuId, Stock::getStock));
-        skuList.forEach(s->s.setStock(stockMap.get(s.getId())));
+        //
+        loadStockInSku(ids, skuList);
         return skuList;
     }
 
@@ -216,5 +211,22 @@ public class GoodsService {
         spu.setSpuDetail(queryDetailBySpuId(id));
 
         return spu;
+    }
+
+    public List<Sku> querySkusBySpuIds(List<Long> ids) {
+        List<Sku> skuList = skuMapper.selectByIdList(ids);
+        if (CollectionUtils.isEmpty(skuList)){
+            throw new LyException(ExceptionEnum.GOODS_NOT_FOND);
+        }
+        loadStockInSku(ids, skuList);
+        return skuList;
+    }
+
+    private void loadStockInSku(List<Long> ids, List<Sku> skuList) {
+        //批量一次查完库存
+        List<Stock> stockList = stockMapper.selectByIdList(ids);
+        //把stock变成map，key是sku的id，value是库存数量
+        Map<Long, Integer> stockMap = stockList.stream().collect(Collectors.toMap(Stock::getSkuId, Stock::getStock));
+        skuList.forEach(s -> s.setStock(stockMap.get(s.getId())));
     }
 }
