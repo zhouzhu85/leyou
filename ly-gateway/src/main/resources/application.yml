@@ -16,6 +16,7 @@ zuul:
     search-service: /search/**
     user-service: /user/**
     auth-service: /auth/**
+    cart-service: /cart/**
     upload-service: /**
   add-host-header: true #添加host头信息
   sensitive-headers:
