@@ -30,6 +30,16 @@ public class CartController {
         cartService.addCart(cart);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+    /**
+     * 保存localStorage数据到购物车
+     * @param list
+     * @return
+     */
+    @PostMapping("more")
+    public ResponseEntity<Void> addMoreCart(@RequestBody List<Cart> list){
+        cartService.addMoreCart(list);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 
     /**
      * 查询登录用户的购物车

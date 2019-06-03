@@ -28,6 +28,13 @@ public class CartService {
     private static final String KEY_PREFIX="cart:userId:";
 
     public void addCart(Cart cart) {
+        loadCartList(cart);
+    }
+
+    public void addMoreCart(List<Cart> carts) {
+        carts.forEach(cart -> loadCartList(cart));
+    }
+    private void loadCartList(Cart cart){
         //获取用户信息
         UserInfo user = UserInterceptor.getUser();
         String key=KEY_PREFIX+user.getId();
@@ -45,7 +52,6 @@ public class CartService {
         //写回redis
         operations.put(hashKey,JsonUtils.toString(cart));
     }
-
     public List<Cart> queryCartList() {
         //获取登录用户信息
         UserInfo user = UserInterceptor.getUser();
