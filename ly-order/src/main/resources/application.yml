@@ -24,3 +24,6 @@ ly:
   jwt:
     pubKeyPath: E:\\leyou_atuh_key\\rsa.pub # 公钥地址
     cookieName: LY_TOKEN
+  worker:
+    workerId: 1
+    dataCenterId: 1
