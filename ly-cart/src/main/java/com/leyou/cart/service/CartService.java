@@ -31,7 +31,7 @@ public class CartService {
         loadCartList(cart);
     }
 
-    public void addMoreCart(List<Cart> carts) {
+    public void mergeLocalStorageToCart(List<Cart> carts) {
         carts.forEach(cart -> loadCartList(cart));
     }
     private void loadCartList(Cart cart){

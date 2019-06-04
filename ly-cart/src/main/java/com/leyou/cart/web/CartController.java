@@ -31,13 +31,13 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     /**
-     * 保存localStorage数据到购物车
-     * @param list
+     * 合并localStorage数据到购物车
+     * @param carts
      * @return
      */
     @PostMapping("more")
-    public ResponseEntity<Void> addMoreCart(@RequestBody List<Cart> list){
-        cartService.addMoreCart(list);
+    public ResponseEntity<Void> mergeLocalStorageToCart(@RequestBody List<Cart> carts){
+        cartService.mergeLocalStorageToCart(carts);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
