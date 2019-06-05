@@ -128,4 +128,12 @@ public class OrderService {
         goodsClient.decreaseStock(cartDTOS);
         return orderId;
     }
+
+    public Order queryOrderById(Long id) {
+        Order order = orderMapper.selectByPrimaryKey(id);
+        if (order==null){
+            throw new LyException(ExceptionEnum.ORDER_NOT_FOUND);
+        }
+        return order;
+    }
 }
