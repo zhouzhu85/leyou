@@ -41,7 +41,7 @@ public class BrandService {
         return new PageResult<>(info.getTotal(),list);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void saveBrand(Brand brand, List<Long> cids) {
         //新增品牌
         brand.setId(null);
