@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
@@ -130,10 +131,25 @@ public class OrderService {
     }
 
     public Order queryOrderById(Long id) {
+        //查询订单
         Order order = orderMapper.selectByPrimaryKey(id);
         if (order==null){
             throw new LyException(ExceptionEnum.ORDER_NOT_FOUND);
         }
+        //查询订单
+        OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setOrderId(id);
+        List<OrderDetail> orderDetails = orderDetailMapper.select(orderDetail);
+        if (CollectionUtils.isEmpty(orderDetails)){
+            throw new LyException(ExceptionEnum.ORDER_DETAIL_NOT_FOUND);
+        }
+        order.setOrderDetails(orderDetails);
+        //查询订单状态
+        OrderStatus orderStatus = statusMapper.selectByPrimaryKey(id);
+        if (orderStatus==null){
+            throw new LyException(ExceptionEnum.ORDER_STATUS_NOT_FOUND);
+        }
+        order.setOrderStatus(orderStatus);
         return order;
     }
 }
